@@ -10,9 +10,9 @@ describe('App', () => {
         {
           data: {
             app: { title: 'Test' },
-            backend: { baseUrl: 'http://localhost:7007' },
+            backend: { baseUrl: 'http://localhost:8080' },
             techdocs: {
-              storageUrl: 'http://localhost:7007/api/techdocs/static/docs',
+              storageUrl: 'http://localhost:8080/api/techdocs/static/docs',
             },
           },
           context: 'test',
