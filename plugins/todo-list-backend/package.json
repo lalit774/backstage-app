@@ -1,0 +1,55 @@
+{
+  "name": "@internal/plugin-todo-list-backend",
+  "version": "1.0.20-next.0",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "license": "Apache-2.0",
+  "private": true,
+  "backstage": {
+    "role": "backend-plugin"
+  },
+  "homepage": "https://backstage.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/backstage/backstage",
+    "directory": "plugins/plugins/example-todo-list-backend"
+  },
+  "publishConfig": {
+    "access": "public",
+    "main": "dist/index.cjs.js",
+    "types": "dist/index.d.ts"
+  },
+  "scripts": {
+    "start": "backstage-cli package start",
+    "build": "backstage-cli package build",
+    "lint": "backstage-cli package lint",
+    "test": "backstage-cli package test",
+    "prepack": "backstage-cli package prepack",
+    "postpack": "backstage-cli package postpack",
+    "clean": "backstage-cli package clean"
+  },
+  "dependencies": {
+    "@backstage/backend-common": "*",
+    "@backstage/backend-plugin-api": "*",
+    "@backstage/config": "*",
+    "@backstage/errors": "*",
+    "@backstage/plugin-auth-node": "*",
+    "@types/express": "^4.17.6",
+    "express": "^4.17.1",
+    "express-promise-router": "^4.1.0",
+    "uuid": "^8.3.2",
+    "winston": "^3.2.1",
+    "yn": "^4.0.0"
+  },
+  "devDependencies": {
+    "@backstage/cli": "*",
+    "@types/supertest": "^2.0.8",
+    "@types/uuid": "^8.0.0",
+    "msw": "^1.0.0",
+    "supertest": "^6.1.6"
+  },
+  "files": [
+    "dist",
+    "alpha"
+  ]
+}
