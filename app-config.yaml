@@ -77,22 +77,35 @@ catalog:
     - allow: [Component, System, API, Resource, Location]
   locations:
     # Local example data, file locations are relative to the backend process, typically `packages/backend`
-    - type: file
-      target: ../../examples/entities.yaml
-    - type: file
-      target: ../../examples/all.yaml
+    # - type: file
+    #   target: ../../examples/entities.yaml
+
+    - type: url
+      target: https://github.com/lalit774/custom-catalog/blob/main/all-apis.yaml
+
+    - type: url
+      target: https://github.com/lalit774/custom-catalog/blob/main/all-components.yaml
+
+    - type: url
+      target: https://github.com/lalit774/custom-catalog/blob/main/all-domains.yaml
+
+    - type: url
+      target: https://github.com/lalit774/custom-catalog/blob/main/all-resources.yaml
+
+    - type: url
+      target: https://github.com/lalit774/custom-catalog/blob/main/all-systems.yaml
 
     # Local example template
-    - type: file
-      target: ../../examples/template/template.yaml
-      rules:
-        - allow: [Template]
+    # - type: file
+    #   target: ../../examples/template/template.yaml
+    #   rules:
+    #     - allow: [Template]
 
-    # Local example organizational data
-    - type: file
-      target: ../../examples/org.yaml
-      rules:
-        - allow: [User, Group]
+    # # Local example organizational data
+    # - type: file
+    #   target: ../../examples/org.yaml
+    #   rules:
+    #     - allow: [User, Group]
 
     ## Uncomment these lines to add more example data
     # - type: url
