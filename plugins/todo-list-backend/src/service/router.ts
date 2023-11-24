@@ -19,8 +19,17 @@ import express from 'express';
 import Router from 'express-promise-router';
 import { Logger } from 'winston';
 import { add, getAll, update } from './todos';
-import { InputError } from '@backstage/errors';
-import { IdentityApi } from '@backstage/plugin-auth-node';
+import { InputError, NotAllowedError } from '@backstage/errors';
+import {
+  getBearerTokenFromAuthorizationHeader,
+  IdentityApi,
+} from '@backstage/plugin-auth-node';
+import {
+  PermissionEvaluator,
+  AuthorizeResult,
+} from '@backstage/plugin-permission-common';
+import { createPermissionIntegrationRouter } from '@backstage/plugin-permission-node';
+import { todoListCreatePermission } from '@internal/plugin-todo-list-common';
 
 /**
  * Dependencies of the todo-list router
@@ -30,6 +39,7 @@ import { IdentityApi } from '@backstage/plugin-auth-node';
 export interface RouterOptions {
   logger: Logger;
   identity: IdentityApi;
+  permissions: PermissionEvaluator;
 }
 
 /**
@@ -44,7 +54,11 @@ export interface RouterOptions {
 export async function createRouter(
   options: RouterOptions,
 ): Promise<express.Router> {
-  const { logger, identity } = options;
+  const { logger, identity, permissions } = options;
+
+  const permissionIntegrationRouter = createPermissionIntegrationRouter({
+    permissions: [todoListCreatePermission],
+  });
 
   const router = Router();
   router.use(express.json());
@@ -53,6 +67,8 @@ export async function createRouter(
     logger.info('PONG!');
     response.json({ status: 'ok' });
   });
+
+  router.use(permissionIntegrationRouter);
 
   router.get('/todos', async (_req, res) => {
     res.json(getAll());
@@ -63,6 +79,19 @@ export async function createRouter(
 
     const user = await identity.getIdentity({ request: req });
     author = user?.identity.userEntityRef;
+
+    const token = getBearerTokenFromAuthorizationHeader(
+      req.header('authorization'),
+    );
+    const decision = (
+      await permissions.authorize([{ permission: todoListCreatePermission }], {
+        token,
+      })
+    )[0];
+
+    if (decision.result === AuthorizeResult.DENY) {
+      throw new NotAllowedError('Unauthorized');
+    }
 
     if (!isTodoCreateRequest(req.body)) {
       throw new InputError('Invalid payload');

@@ -18,8 +18,10 @@ import {
   createServiceBuilder,
   loadBackendConfig,
   HostDiscovery,
+  ServerTokenManager,
 } from '@backstage/backend-common';
 import { DefaultIdentityClient } from '@backstage/plugin-auth-node';
+import { ServerPermissionClient } from '@backstage/plugin-permission-node';
 import { Server } from 'http';
 import { Logger } from 'winston';
 import { createRouter } from './router';
@@ -37,12 +39,20 @@ export async function startStandaloneServer(
   logger.debug('Starting application server...');
   const config = await loadBackendConfig({ logger, argv: process.argv });
   const discovery = HostDiscovery.fromConfig(config);
+  const tokenManager = ServerTokenManager.fromConfig(config, {
+    logger,
+  });
+  const permissions = ServerPermissionClient.fromConfig(config, {
+    discovery,
+    tokenManager,
+  });
   const router = await createRouter({
     logger,
     identity: DefaultIdentityClient.create({
       discovery,
       issuer: await discovery.getExternalBaseUrl('auth'),
     }),
+    permissions,
   });
 
   let service = createServiceBuilder(module)

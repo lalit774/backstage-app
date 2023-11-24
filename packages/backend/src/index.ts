@@ -32,6 +32,7 @@ import { PluginEnvironment } from './types';
 import { ServerPermissionClient } from '@backstage/plugin-permission-node';
 import { DefaultIdentityClient } from '@backstage/plugin-auth-node';
 import todoList from './plugins/todolist';
+import permission from './plugins/permission';
 
 function makeCreateEnv(config: Config) {
   const root = getRootLogger();
@@ -87,6 +88,7 @@ async function main() {
   const searchEnv = useHotMemoize(module, () => createEnv('search'));
   const appEnv = useHotMemoize(module, () => createEnv('app'));
   const todoListEnv = useHotMemoize(module, () => createEnv('todolist'));
+  const permissionEnv = useHotMemoize(module, () => createEnv('permission'));
 
   const apiRouter = Router();
   apiRouter.use('/catalog', await catalog(catalogEnv));
@@ -96,6 +98,7 @@ async function main() {
   apiRouter.use('/proxy', await proxy(proxyEnv));
   apiRouter.use('/search', await search(searchEnv));
   apiRouter.use('/todolist', await todoList(todoListEnv));
+  apiRouter.use('/permission', await permission(permissionEnv));
 
   // Add backends ABOVE this line; this 404 handler is the catch-all fallback
   apiRouter.use(notFoundHandler());

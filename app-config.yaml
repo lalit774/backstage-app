@@ -10,8 +10,9 @@ backend:
   # See https://backstage.io/docs/auth/service-to-service-auth for
   # information on the format
   # auth:
-  #   keys:
-  #     - secret: ${BACKEND_SECRET}
+  keys:
+    - secret: ${BACKEND_SECRET}
+
   baseUrl: http://localhost:8080
   listen:
     port: 8080
@@ -116,3 +117,5 @@ catalog:
     #   target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/acme-corp.yaml
     #   rules:
     #     - allow: [User, Group]
+permission:
+  enabled: true

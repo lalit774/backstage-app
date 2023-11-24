@@ -21,9 +21,9 @@ import { createPermission } from '@backstage/plugin-permission-common';
  *
  * @public
  */
-export const tempExamplePermission = createPermission({
-  name: 'temp.example.noop',
-  attributes: {},
+export const todoListCreatePermission = createPermission({
+  name: 'todo.list.create',
+  attributes: { action: 'create' },
 });
 
 /**
@@ -31,4 +31,4 @@ export const tempExamplePermission = createPermission({
  *
  * @public
  */
-export const todoListPermissions = [tempExamplePermission];
+export const todoListPermissions = [todoListCreatePermission];
